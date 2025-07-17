@@ -3,9 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="/css/style.css" >
+    <link rel="script" href="/js/script.js" >
+    <title>Terminal</title>
 </head>
 <body>
-    
+    <main id="main_container">
+        <div class="terminal">
+            <section id="top_bar">
+                <div id="top_buttons">
+                    <button class="button" id="exit">&#x2716;</button>
+                    <button class="button">&#x2212;</button>
+                    <button class="button">&#9723;</button>
+                </div>
+                <p id="bar-user">mahi@ubuntu: ~</p>
+            </section>
+
+            <section id="body">
+                <div id="prompt">
+                    <span id="user">mahi@ubuntu:</span>
+                    <span id="~">~</span>
+                    <span id="$">$</span>
+                    <span id="cursor"></span>
+                </div>
+            </section>
+        </div>
+
+    </main>
 </body>
 </html>
