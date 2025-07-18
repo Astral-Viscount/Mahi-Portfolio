@@ -102,11 +102,12 @@ body {
     margin-right: 5px;
 }
 
-#~ {
+#wavy {
     color: #4878c0;
     margin-right: 5px;
 }
-#$ {
+
+#dollar {
     color: #dddddd;
     margin-right: 5px;
 }
@@ -128,6 +129,7 @@ body {
         background: transparent;
     }
 }
+
 @media (max-width: 600px) { /*Recommended by AI*/
     .terminal {
         max-height: 90%;
