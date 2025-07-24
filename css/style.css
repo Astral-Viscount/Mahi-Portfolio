@@ -19,7 +19,6 @@ body {
 
 .terminal {
     width: 50vw;
-    float: left;
     height: 100vh;
     box-shadow: 2px 4px 10px rgba(0,0,0,0.5);
     border-radius: 5px;
@@ -77,6 +76,7 @@ body {
     margin-left: 6px;
     font-size: 14px;
     line-height: 15px;
+    -webkit-user-select: none;
     user-select: none;
     white-space: nowrap;
 }
