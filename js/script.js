@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const body = document.getElementById("body");
     const prompt = document.getElementById("prompt");
     const cursor = document.getElementById("cursor");
+    const input = document.getElementById("input");
+
+    let history = [];
+    let index_history = -1;
+    let currentinput = "";
 
     const commands = {
     help: `Available commands:<br> - about<br> - skills<br> - projects<br> - contact<br> - clear`,
@@ -12,5 +17,23 @@ document.addEventListener("DOMContentLoaded", () => {
     clear: 'clear'
     };
 
-    
+    prompt.insertBefore(input, cursor);
+
+    function updateinput() {
+        input.textContent = currentinput;
+    }
+
+    function output(content) {
+        const output = document.createElement("div");
+        output.innerHTML = content;
+        body.insertBefore(output, prompt);
+        body.scrollTop = body.scrollHeight;
+    }
+
+    document.addEventListener("keydown", (event) => {
+        const key = event.key;
+
+        
+
+    });
 });

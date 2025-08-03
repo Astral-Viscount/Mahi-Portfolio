@@ -72,7 +72,7 @@ body {
     background: linear-gradient(#e81123 0%, #c00000 100%);
 }
 
-#bar-user {
+.bar-user {
     color: #d5d0ce;
     margin-left: 6px;
     font-size: 14px;
@@ -142,4 +142,13 @@ body {
         max-height: 90%;
         width: 90%;
     }
+}
+
+#input {
+    white-space: pre;
+    color: #dddddd;
+    font-family: 'Ubuntu Mono', monospace;
+    padding-left: 2px;
+    display: inline-block;
+    min-width: 1ch;
 }
