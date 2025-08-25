@@ -9,12 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let current_input = "";
 
     const commands = {
-    help: `Available commands:<br> - about<br> - skills<br> - projects<br> - contact<br> - clear`,
-    about: `Hi, I'm Mahi Mahatab. I'm a high school student and aspiring software engineer with interests in computer engineering, AI, and electronics.`,
-    skills: `Languages: HTML, CSS, JavaScript, Python, Lua<br>Tools: GitHub, VS Code, Tinkercad, PROS, Fritzing, KiCad`,
-    projects: `1. Virtual Assistant (Python)<br>2. Logic Gate Circuits (Tinkercad)<br>3. Portfolio Website<br>4. AI Snake Game<br>4. 4-bit Calculator`,
-    contact: `Email:<a href="mailto:md.mahatabmahimn@gmail.com" target="_blank">md.mahatabmahimn@gmail.com</a><br>GitHub: <a href="https://github.com/Astral-Viscount" target="_blank">Astral-Viscount</a>`,
-    clear: 'clear'
+        help: `Available commands:<br> - about<br> - skills<br> - projects<br> - contact<br> - clear`,
+        about: `Hi, I'm Mahi Mahatab. I'm a high school student and aspiring software engineer with interests in computer engineering, AI, and electronics.`,
+        skills: `Languages: HTML, CSS, JavaScript, Python, Lua<br>Tools: GitHub, VS Code, Tinkercad, PROS, Fritzing, KiCad`,
+        projects: `1. Virtual Assistant (Python)<br>2. Logic Gate Circuits (Tinkercad)<br>3. Portfolio Website<br>4. AI Snake Game<br>4. 4-bit Calculator`,
+        contact: `Email:<a href="mailto:md.mahatabmahimn@gmail.com" target="_blank">md.mahatabmahimn@gmail.com</a><br>GitHub: <a href="https://github.com/Astral-Viscount" target="_blank">Astral-Viscount</a>`
     };
 
     prompt.insertBefore(input, cursor);
@@ -36,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (key === "Enter") {
             event.preventDefault();
             const command = current_input.trim();
-            appendOutput(`<span id="user">mahi@ubuntu:</span><span id="wavy">~</span><span id="dollar">$</span> ${current_input}`);
+            output(`<span id="user">mahi@ubuntu:</span><span id="wavy">~</span><span id="dollar">$</span> ${current_input}`);
 
             if (command === "clear") {
                 const outputLines = body.querySelectorAll("div");
@@ -50,44 +49,41 @@ document.addEventListener("DOMContentLoaded", () => {
                 history_index = -1;
             } else if (command) {
                 if (commands[command]) {
-                    appendOutput(commands[command]);
+                    output(commands[command]);
                 } else {
-                    appendOutput(`Command not found: ${command}. Type 'help' for a list of commands.`);
+                    output(`Command not found: ${command}. Type 'help' for a list of commands.`);
                 }
                 history.push(command);
                 history_index = history.length;
-            } else {
-
             }
             current_input = "";
-            updateInputDisplay();
+            updateinput();
             body.scrollTop = body.scrollHeight;
         } else if (key === "Backspace") {
             event.preventDefault();
             current_input = current_input.slice(0, -1);
-            updateInputDisplay();
+            updateinput();
         } else if (key === "ArrowUp") {
             event.preventDefault();
             if (history_index > 0) {
                 history_index--;
                 current_input = history[history_index];
-                updateInputDisplay();
+                updateinput();
             }
         } else if (key === "ArrowDown") {
             event.preventDefault();
             if (history_index < history.length - 1) {
                 history_index++;
                 current_input = history[history_index];
-                updateInputDisplay();
+                updateinput();
             } else if (history_index === history.length - 1) {
                 history_index = history.length;
                 current_input = "";
-                updateInputDisplay();
+                updateinput();
             }
         } else if (key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
             current_input += key;
-            updateInputDisplay();
+            updateinput();
         }
-
     });
 });
