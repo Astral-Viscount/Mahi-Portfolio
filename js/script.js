@@ -5,8 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("input");
 
     let history = [];
-    let index_history = -1;
-    let currentinput = "";
+    let history_index = -1;
+    let current_input = "";
 
     const commands = {
     help: `Available commands:<br> - about<br> - skills<br> - projects<br> - contact<br> - clear`,
@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     prompt.insertBefore(input, cursor);
 
     function updateinput() {
-        input.textContent = currentinput;
+        input.textContent = current_input;
     }
 
     function output(content) {
@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (key === "Enter") {
             event.preventDefault();
-            const command = currentInput.trim();
-            appendOutput(`<span id="user">mahi@ubuntu:</span><span id="wavy">~</span><span id="dollar">$</span> ${currentInput}`);
+            const command = current_input.trim();
+            appendOutput(`<span id="user">mahi@ubuntu:</span><span id="wavy">~</span><span id="dollar">$</span> ${current_input}`);
 
             if (command === "clear") {
                 const outputLines = body.querySelectorAll("div");
@@ -45,9 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         line.remove();
                     }
                 });
-                currentInput = "";
+                current_input = "";
                 history = [];
-                historyIndex = -1;
+                history_index = -1;
             } else if (command) {
                 if (commands[command]) {
                     appendOutput(commands[command]);
@@ -55,37 +55,37 @@ document.addEventListener("DOMContentLoaded", () => {
                     appendOutput(`Command not found: ${command}. Type 'help' for a list of commands.`);
                 }
                 history.push(command);
-                historyIndex = history.length;
+                history_index = history.length;
             } else {
 
             }
-            currentInput = "";
+            current_input = "";
             updateInputDisplay();
             body.scrollTop = body.scrollHeight;
         } else if (key === "Backspace") {
             event.preventDefault();
-            currentInput = currentInput.slice(0, -1);
+            current_input = current_input.slice(0, -1);
             updateInputDisplay();
         } else if (key === "ArrowUp") {
             event.preventDefault();
-            if (historyIndex > 0) {
-                historyIndex--;
-                currentInput = history[historyIndex];
+            if (history_index > 0) {
+                history_index--;
+                current_input = history[history_index];
                 updateInputDisplay();
             }
         } else if (key === "ArrowDown") {
             event.preventDefault();
-            if (historyIndex < history.length - 1) {
-                historyIndex++;
-                currentInput = history[historyIndex];
+            if (history_index < history.length - 1) {
+                history_index++;
+                current_input = history[history_index];
                 updateInputDisplay();
-            } else if (historyIndex === history.length - 1) {
-                historyIndex = history.length;
-                currentInput = "";
+            } else if (history_index === history.length - 1) {
+                history_index = history.length;
+                current_input = "";
                 updateInputDisplay();
             }
         } else if (key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
-            currentInput += key;
+            current_input += key;
             updateInputDisplay();
         }
 
