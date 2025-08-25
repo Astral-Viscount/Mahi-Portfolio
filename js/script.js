@@ -33,7 +33,61 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("keydown", (event) => {
         const key = event.key;
 
-        
+        if (key === "Enter") {
+            event.preventDefault();
+            const command = currentInput.trim();
+            appendOutput(`<span id="user">mahi@ubuntu:</span><span id="wavy">~</span><span id="dollar">$</span> ${currentInput}`);
+
+            if (command === "clear") {
+                const outputLines = body.querySelectorAll("div");
+                outputLines.forEach(line => {
+                    if (line.id !== "prompt") {
+                        line.remove();
+                    }
+                });
+                currentInput = "";
+                history = [];
+                historyIndex = -1;
+            } else if (command) {
+                if (commands[command]) {
+                    appendOutput(commands[command]);
+                } else {
+                    appendOutput(`Command not found: ${command}. Type 'help' for a list of commands.`);
+                }
+                history.push(command);
+                historyIndex = history.length;
+            } else {
+
+            }
+            currentInput = "";
+            updateInputDisplay();
+            body.scrollTop = body.scrollHeight;
+        } else if (key === "Backspace") {
+            event.preventDefault();
+            currentInput = currentInput.slice(0, -1);
+            updateInputDisplay();
+        } else if (key === "ArrowUp") {
+            event.preventDefault();
+            if (historyIndex > 0) {
+                historyIndex--;
+                currentInput = history[historyIndex];
+                updateInputDisplay();
+            }
+        } else if (key === "ArrowDown") {
+            event.preventDefault();
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                currentInput = history[historyIndex];
+                updateInputDisplay();
+            } else if (historyIndex === history.length - 1) {
+                historyIndex = history.length;
+                currentInput = "";
+                updateInputDisplay();
+            }
+        } else if (key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+            currentInput += key;
+            updateInputDisplay();
+        }
 
     });
 });
