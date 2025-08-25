@@ -44,44 +44,60 @@ document.addEventListener("DOMContentLoaded", () => {
                         line.remove();
                     }
                 });
+
                 current_input = "";
                 history = [];
                 history_index = -1;
+
             } else if (command) {
+                
                 if (commands[command]) {
                     output(commands[command]);
-                } else {
+                }
+
+                else {
                     output(`Command not found: ${command}. Type 'help' for a list of commands.`);
                 }
+
                 history.push(command);
                 history_index = history.length;
             }
+
             current_input = "";
             updateinput();
             body.scrollTop = body.scrollHeight;
+
         } else if (key === "Backspace") {
             event.preventDefault();
             current_input = current_input.slice(0, -1);
             updateinput();
+
         } else if (key === "ArrowUp") {
             event.preventDefault();
+
             if (history_index > 0) {
                 history_index--;
                 current_input = history[history_index];
                 updateinput();
             }
+
         } else if (key === "ArrowDown") {
             event.preventDefault();
+
             if (history_index < history.length - 1) {
                 history_index++;
                 current_input = history[history_index];
                 updateinput();
-            } else if (history_index === history.length - 1) {
+            } 
+
+            else if (history_index === history.length - 1) {
                 history_index = history.length;
                 current_input = "";
                 updateinput();
             }
-        } else if (key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+        } 
+
+        else if (key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
             current_input += key;
             updateinput();
         }
