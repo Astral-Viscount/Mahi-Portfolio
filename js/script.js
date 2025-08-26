@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function output(content) {
         const output = document.createElement("div");
+        output.id = "output"
         output.innerHTML = content;
         body.insertBefore(output, prompt);
         body.scrollTop = body.scrollHeight;

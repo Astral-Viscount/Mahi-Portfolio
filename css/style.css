@@ -25,7 +25,7 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    min-width: max-content;
+    min-width: 0;
 }
 
 #top_bar {
@@ -145,10 +145,24 @@ body {
 }
 
 #input {
-    white-space: pre;
+    white-space: pre-wrap;
     color: #dddddd;
     font-family: 'Ubuntu Mono', monospace;
     padding-left: 2px;
     display: inline-block;
     min-width: 1ch;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+#output {
+    white-space: pre-wrap; 
+    color: #dddddd;
+    font-family: 'Ubuntu Mono', monospace;
+    padding-left: 2px;
+    display: block;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
