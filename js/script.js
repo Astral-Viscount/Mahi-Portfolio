@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     prompt.insertBefore(input, cursor);
+    input.focus();
 
     function updateinput() {
         input.textContent = current_input;
@@ -31,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     document.addEventListener("keydown", (event) => {
+        input.focus();
         const key = event.key;
 
         if (key === "Enter") {
@@ -92,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } 
 
             else if (history_index === history.length - 1) {
+                event.preventDefault();
                 history_index = history.length;
                 current_input = "";
                 updateinput();
