@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateinput() {
         input.textContent = current_input;
+        body.scrollTop = body.scrollHeight;
     }
 
     function output(content) {
