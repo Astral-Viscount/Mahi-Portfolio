@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let current_input = "";
 
     const commands = {
-        help: `Available commands:<br> - about<br> - skills<br> - projects<br> - contact<br> - clear`,
+        help: `<b>Available commands:</b><br> - about<br> - skills<br> - projects<br> - contact<br> - clear`,
         about: `Hi, I'm Mahi Mahatab. I'm a high school student and aspiring software engineer with interests in computer engineering, AI, and electronics.`,
         skills: `Languages: HTML, CSS, JavaScript, Python, Lua<br>Tools: GitHub, VS Code, Tinkercad, PROS, Fritzing, KiCad`,
         projects: `1. Virtual Assistant (Python)<br>2. Logic Gate Circuits (Tinkercad)<br>3. Portfolio Website<br>4. AI Snake Game<br>4. 4-bit Calculator`,
@@ -21,7 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateinput() {
         input.textContent = current_input;
-        body.scrollTop = body.scrollHeight;
+
+        if (current_input.length > 0) {
+            input.appendChild(cursor); 
+        } else {
+            prompt.appendChild(cursor);
+        }
+
+        body.scrollTop = body.scrollHeight;;
     }
 
     function output(content) {
@@ -60,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 else {
-                    output(`Command not found: ${command}. Type 'help' for a list of commands.`);
+                    output(`<b>Command not found:</b> ${command}. <br><b>Type 'help' for a list of commands.</b>`);
                 }
 
                 history.push(command);
