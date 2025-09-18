@@ -1,6 +1,6 @@
 // This code has been refined with AI as my original code had lots of repeating logic and bad vector computation. 
 // No new features were added or any functionalities were added by AI other than some design and web development conventions (like webkit and browser control)
-// A lot of the id card calculations were taken from stack overlfow and some YT tutorials
+// Most of the id card calculations were taken from stack overlfow and some YT tutorials
 
 document.addEventListener("DOMContentLoaded", () => {
     const body = document.getElementById("body");

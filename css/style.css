@@ -313,16 +313,25 @@ body {
 }
 
 
-#id-card .barcode, .back-barcode {
+#id-card .school-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: auto;
-    width: 88%;
-    height: 56px;
-    border-radius: 4px;
+    width: 86%;
+    max-width: 220px;
+    height: 64px;
+    padding: 6px 0;
+    box-sizing: border-box;
+}
 
-    background-image: repeating-linear-gradient(to right,
-        #333 0, #333 1px, transparent 1px, transparent 4px,
-        #333 4px, #333 8px, transparent 8px, transparent 12px
-    );
+#id-card .school-logo img {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
 }
 
 #id-card.flipped { 
