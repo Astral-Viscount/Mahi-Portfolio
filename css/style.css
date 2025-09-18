@@ -7,6 +7,12 @@
     align-items: center;
     height: 100vh;
 }
+
+a {
+    color: #4878c0;
+    text-decoration: none;
+}
+
 body {
     background: linear-gradient(45deg, #57003f 0%,#f57453 100%);
     font-family: 'Ubuntu', sans-serif;
