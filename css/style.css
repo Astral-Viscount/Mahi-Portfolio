@@ -185,8 +185,6 @@ body {
     overflow-wrap: break-word;
 }
 
-
-
 #id-card-container {
     position: fixed;
     top: 0;
@@ -212,7 +210,6 @@ body {
     stroke-width: 5;
     stroke-linecap: round;
 }
-
 
 #id-card {
     position: absolute;
@@ -305,13 +302,13 @@ body {
     color: #222; 
     text-align: center; 
 }
+
 #id-card p { 
     margin: 0; 
     font-size: 14px; 
     color: #666; 
     text-align: center; 
 }
-
 
 #id-card .school-logo {
     display: flex;
