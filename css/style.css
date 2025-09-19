@@ -443,3 +443,46 @@ a {
         min-height: 180px; 
     }
 }
+
+.info-section {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+.info-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+}
+
+.info-section p {
+    line-height: 1.6;
+}
+
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-left: 0;
+    list-style-type: none;
+    margin: 0;
+}
+
+.skills-list li {
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.contact-links a {
+    display: block;
+    margin-bottom: 8px;
+    color: #7ec0ff;
+}

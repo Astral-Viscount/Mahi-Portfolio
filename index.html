@@ -9,13 +9,12 @@
 </head>
 <body>
 
-    <!-- ID Card -->
+    <!-- Front ID Card -->
 
     <div id="id-card-container" aria-hidden="true">
         <svg id="lanyard" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
             <line id="lanyard-line" />
         </svg>
-
         <div id="id-card" role="img" aria-label="ID card">
             <div class="card-inner">
                 <div class="card-front">
@@ -24,12 +23,31 @@
                     <p>Burnside High School Student</p>
                     <div class="school-logo"><img src="assets/images/school-logo.png" alt="school logo"></div>
                 </div>
-
-                <div class="card-back" aria-hidden="true">
-                </div>
+                <div class="card-back" aria-hidden="true"></div>
             </div>
         </div>
     </div>
+
+    <!-- Back ID Card -->
+
+    <template id="id-card-back-template">
+        <div class="back-header">
+            <h3>Burnside High School</h3>
+            <div class="school-id">SCHOOL ID: <strong>23691</strong></div>
+        </div>
+        <div class="back-content">
+            <div class="back-photo"><img src="assets/images/mahi.jpg" alt="photo"></div>
+            <div class="back-info">
+                <div class="info-row"><span class="label">LEGAL NAME</span><span class="value">MD Mahatab Mahi</span></div>
+                <div class="info-row"><span class="label">PREFERRED</span><span class="value">Mahi Mahatab</span></div>
+                <div class="info-row"><span class="label">DOB</span><span class="value">26 Oct 2009</span></div>
+                <div class="info-row"><span class="label">AGE</span><span class="value">15</span></div>
+                <div class="info-row"><span class="label">YEAR</span><span class="value">11</span></div>
+                <div class="info-row"><span class="label">NSN</span><span class="value">0168531528</span></div>
+            </div>
+        </div>
+        <div class="back-footer"><img src="assets/images/school-logo.png" alt="school logo" class="footer-logo"></div>
+    </template>
 
     <!-- The Terminal -->
 
@@ -37,18 +55,15 @@
         <div class="terminal" id="terminal">
             <section id="top_bar">
                 <p id="bar-user">&copy; mahi@ubuntu: ~ </p>
-
                 <div id="hint-bubble" class="hint-bubble" role="note" aria-live="polite">
-                    <span>Type <b>"help"</b> to see available commands -- Right-click the ID card to flip it.</span>
+                    <span>Type <b>"help"</b> to see available commands -- Right-click the ID card to flip it</span>
                 </div>
-
                 <div id="top_buttons">
                     <button class="button">&#x2212;</button>
                     <button class="button">&#9723;</button>
                     <button class="button" id="exit">&#x2716;</button>
                 </div>
             </section>
-
             <section id="body">
                 <div id="prompt">
                     <span id="user">mahi@ubuntu:</span>
@@ -61,44 +76,107 @@
         </div>
     </main>
 
-    <!-- Template code for id card, projects and tools to refer to in js-->
+    <!-- Projects  -->
 
-    <template id="id-card-back-template">
-        <div class="back-header">
-            <h3>Burnside High School</h3>
-            <div class="school-id">SCHOOL ID: <strong>23691</strong></div>
-        </div>
-        <div class="back-content">
-            <div class="back-photo">
-                <img src="assets/images/mahi.jpg" alt="photo">
+    <template id="projects-output-template">
+        <strong>Projects</strong>
+        <div class="better-grid">
+            <div class="project-card">
+                <img src="https://placehold.co/400x240?text=Virtual+Assistant" alt="Virtual Assistant" class="project-image">
+                <div class="title">Virtual Assistant</div>
+                <div class="desc">A Python virtual assistant that handles simple voice commands.</div>
+                <div class="link"><a href="https://github.com/Astral-Viscount/virtual-assistant" target="_blank" rel="noopener noreferrer">View project ↗</a></div>
             </div>
-            <div class="back-info">
-                <div class="info-row"><span class="label">LEGAL NAME</span><span class="value">MD Mahatab Mahi</span></div>
-                <div class="info-row"><span class="label">PREFERRED</span><span class="value">Mahi Mahatab</span></div>
-                <div class="info-row"><span class="label">DOB</span><span class="value">26 Oct 2009</span></div>
-                <div class="info-row"><span class="label">AGE</span><span class="value">15</span></div>
-                <div class="info-row"><span class="label">YEAR</span><span class="value">11</span></div>
-                <div class="info-row"><span class="label">NSN</span><span class="value">0168531528</span></div>
+
+            <div class="project-card">
+                <img src="https://placehold.co/400x240?text=AI+Snake+Game" alt="AI Snake Game" class="project-image">
+                <div class="title">AI Snake Game</div>
+                <div class="desc">A snake game controlled by a neural net that learns to play.</div>
+                <div class="link"><a href="https://github.com/Astral-Viscount/ai-snake" target="_blank" rel="noopener noreferrer">View project ↗</a></div>
             </div>
-        </div>
-        <div class="back-footer">
-            <img src="assets/images/school-logo.png" alt="school logo" class="footer-logo">
+
+            <div class="project-card">
+                <img src="https://placehold.co/400x240?text=4-bit+Calculator" alt="4-bit Calculator" class="project-image">
+                <div class="title">4-bit Calculator</div>
+                <div class="desc">An educational 4-bit calculator simulated in hardware tools.</div>
+                <div class="link"><a href="https://github.com/Astral-Viscount/4bit-calculator" target="_blank" rel="noopener noreferrer">View project ↗</a></div>
+            </div>
+
         </div>
     </template>
 
-    <template id="project-card-template">
-        <div class="project-card">
-            <img src="" alt="" class="project-image">
-            <div class="title"></div>
-            <div class="desc"></div>
-            <div class="link"><a href="" target="_blank" rel="noopener noreferrer">View project ↗</a></div>
+    <!-- Tools  -->
+
+    <template id="tools-output-template">
+        <strong>Tools (click a tile to open)</strong>
+        <div class="better-grid">
+
+            <div class="tool-card" data-tool-url="https://github.com">
+                <img src="https://placehold.co/120x80?text=GitHub" alt="GitHub" class="tool-image">
+                <div class="tool-name">GitHub</div>
+            </div>
+
+            <div class="tool-card" data-tool-url="https://code.visualstudio.com/">
+                <img src="https://placehold.co/120x80?text=VS+Code" alt="VS Code" class="tool-image">
+                <div class="tool-name">VS Code</div>
+            </div>
+
+            <div class="tool-card" data-tool-url="https://www.tinkercad.com/">
+                <img src="https://placehold.co/120x80?text=Tinkercad" alt="Tinkercad" class="tool-image">
+                <div class="tool-name">Tinkercad</div>
+            </div>
+
+            <div class="tool-card" data-tool-url="https://kicad.org/">
+                <img src="https://placehold.co/120x80?text=KiCad" alt="KiCad" class="tool-image">
+                <div class="tool-name">KiCad</div>
+            </div>
+
         </div>
     </template>
 
-    <template id="tool-card-template">
-        <div class="tool-card">
-            <img src="" alt="" class="tool-image">
-            <div class="tool-name"></div>
+    <!-- About  -->
+
+    <template id="about-output-template">
+        <div class="info-section">
+            <h3>About Me</h3>
+            <p>Hi, I'm Mahi Mahatab. I'm a Burnside High School student and aspiring software engineer with interests in computer engineering, AI, and electronics.</p>
+        </div>
+    </template>
+
+    <!-- Skills  -->
+
+    <template id="skills-output-template">
+        <div class="info-section">
+            <h3>Skills</h3>
+            <h4>Languages</h4>
+            <ul class="skills-list">
+                <li>HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+                <li>Python</li>
+                <li>Lua</li>
+            </ul>
+            <h4 style="margin-top: 20px;">Tools</h4>
+            <ul class="skills-list">
+                <li>GitHub</li>
+                <li>VS Code</li>
+                <li>Tinkercad</li>
+                <li>PROS</li>
+                <li>Fritzing</li>
+                <li>KiCad</li>
+            </ul>
+        </div>
+    </template>
+
+    <!-- Contact  -->
+
+    <template id="contact-output-template">
+        <div class="info-section">
+            <h3>Contact</h3>
+            <div class="contact-links">
+                <p><strong>Email:</strong> <a href="mailto:md.mahatabmahimn@gmail.com">md.mahatabmahimn@gmail.com</a></p>
+                <p><strong>GitHub:</strong> <a href="https://github.com/Astral-Viscount" target="_blank">Astral-Viscount</a></p>
+            </div>
         </div>
     </template>
 

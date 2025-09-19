@@ -15,26 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let history_index = -1;
     let current_input = "";
 
-    // Projects and tools
-    const projects = [
-        { id: "va", title: "Virtual Assistant", desc: "A Python virtual assistant that handles simple voice commands.", url: "https://github.com/Astral-Viscount/virtual-assistant" },
-        { id: "snake-ai", title: "AI Snake Game", desc: "A snake game controlled by a neural net that learns to play.", url: "https://github.com/Astral-Viscount/ai-snake" },
-        { id: "4bit-calc", title: "4-bit Calculator", desc: "An educational 4-bit calculator simulated in hardware tools.", url: "https://github.com/Astral-Viscount/4bit-calculator" }
-    ];
-
-    const tools = [
-        { name: "GitHub", url: "https://github.com" },
-        { name: "VS Code", url: "https://code.visualstudio.com/" },
-        { name: "Tinkercad", url: "https://www.tinkercad.com/" },
-        { name: "KiCad", url: "https://kicad.org/" }
-    ];
-
-    // The output for each available command
+    // Each available command
     const commands = {
-        help: `<b>Available commands:</b><br> - about<br> - skills<br> - projects<br> - tools<br> - contact<br> - clear`,
-        about: `Hi, I'm Mahi Mahatab. I'm a high school student and aspiring software engineer with interests in computer engineering, AI, and electronics.`,
-        skills: `Languages: HTML, CSS, JavaScript, Python, Lua<br>Tools: GitHub, VS Code, Tinkercad, PROS, Fritzing, KiCad`,
-        contact: `Email: <a href="mailto:md.mahatabmahimn@gmail.com">md.mahatabmahimn@gmail.com</a><br>GitHub: <a href="https://github.com/Astral-Viscount" target="_blank">Astral-Viscount</a>`
+        help: `<b>Available commands:</b><br> - about<br> - skills<br> - projects<br> - tools<br> - contact<br> - clear`
     };
 
     input.focus();
@@ -51,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const output_el = document.createElement("div");
         output_el.className = "terminal-output";
         output_el.innerHTML = html;
-
         body.insertBefore(output_el, prompt);
         body.scrollTop = body.scrollHeight;
     }
@@ -59,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fills the back of the ID card using the HTML template
     (function add_stuff() {
         const card_back = document.querySelector('#id-card .card-back');
+
         // Ignores white spaces
         if (!card_back || (card_back.innerHTML && card_back.innerHTML.trim().length > 20)) {
             return;
@@ -77,28 +60,43 @@ document.addEventListener("DOMContentLoaded", () => {
     function process_command(command_raw) {
         const command = command_raw.trim().toLowerCase();
         const promptLine = `<span id="user">mahi@ubuntu:</span><span id="wavy">~</span><span id="dollar">$</span> ${escape_html(command_raw)}`;
+        
         create_output_element(promptLine);
 
-        if (!command) return;
-
-        if (command === "clear") {
-            body.querySelectorAll(".terminal-output").forEach(o => o.remove());
+        if (!command) {
             return;
         }
 
-        if (command === "projects") {
+        // Calls the function based on the command
+        if (command === "help") {
+            create_output_element(commands.help);
+        } 
+        
+        else if (command === "about") {
+            show_about();
+        } 
+        
+        else if (command === "skills") {
+            show_skills();
+        } 
+        
+        else if (command === "projects") {
             show_projects();
-            return;
-        }
-
-        if (command === "tools") {
+        } 
+        
+        else if (command === "tools") {
             show_tools();
-            return;
-        }
-
-        if (commands[command]) {
-            create_output_element(commands[command]);
-        } else {
+        } 
+        
+        else if (command === "contact") {
+            show_contact();
+        } 
+        
+        else if (command === "clear") {
+            body.querySelectorAll(".terminal-output").forEach(o => o.remove());
+        } 
+        
+        else {
             create_output_element(`<b>Command not found:</b> ${escape_html(command_raw)}. Type 'help' for commands.`);
         }
     }
@@ -108,61 +106,59 @@ document.addEventListener("DOMContentLoaded", () => {
         return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    // Shows projects by adding stuff in the project-card template
+    // Displays the projects
     function show_projects() {
-        const template = document.getElementById('project-card-template');
+        const template = document.getElementById('projects-output-template');
+
         if (!template) {
             return;
         }
 
-        const grid_container = document.createElement('div');
-        grid_container.className = 'better-grid';
-
-        for (const p of projects) {
-            const clone = template.content.cloneNode(true);
+        create_output_element(template.innerHTML);
+    }
     
-            const card = clone.querySelector('.project-card');
+    // Displays the tools
+    function show_tools() {
+        const template = document.getElementById('tools-output-template');
 
-            card.querySelector('.project-image').src = p.img;
-            card.querySelector('.project-image').alt = escape_html(p.title);
-            card.querySelector('.title').textContent = p.title;
-            card.querySelector('.desc').textContent = p.desc;
-            card.querySelector('.link a').href = p.url;
-
-            grid_container.appendChild(clone);
+        if (!template) {
+            return;
         }
-        
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = `<strong>Projects</strong>`;
 
-        wrapper.appendChild(grid_container);
-        create_output_element(wrapper.innerHTML);
+        create_output_element(template.innerHTML);
     }
 
-    // Shows tools list by adding stuff to the tool-card template
-    function show_tools() {
-        const template = document.getElementById('tool-card-template');
+    // Displays the about
+    function show_about() {
+        const template = document.getElementById('about-output-template');
+
         if (!template) {
             return;
         }
 
-        const grid_container = document.createElement('div');
-        grid_container.className = 'better-grid';
+        create_output_element(template.innerHTML);
+    }
 
-        for (const t of tools) {
-            const clone = template.content.cloneNode(true);
-            const card = clone.querySelector('.tool-card');
-            card.dataset.toolUrl = t.url;
-            card.querySelector('.tool-image').src = t.img;
-            card.querySelector('.tool-image').alt = escape_html(t.name);
-            card.querySelector('.tool-name').textContent = t.name;
-            grid_container.appendChild(clone);
+    // Displays the skills
+    function show_skills() {
+        const template = document.getElementById('skills-output-template');
+
+        if (!template) {
+            return;
         }
-        
-        const wrapper = document.createElement('div');
-        wrapper.innerHTML = `<strong>Tools (click a tile to open)</strong>`;
-        wrapper.appendChild(grid_container);
-        create_output_element(wrapper.innerHTML);
+
+        create_output_element(template.innerHTML);
+    }
+
+    // Displays the contact
+    function show_contact() {
+        const template = document.getElementById('contact-output-template');
+
+        if (!template) {
+            return;
+        }
+
+        create_output_element(template.innerHTML);
     }
 
     // Listens for clicks on the tool cards
@@ -195,12 +191,16 @@ document.addEventListener("DOMContentLoaded", () => {
             history_index = history.length;
             current_input = "";
 
-        } else if (key === "Backspace") {
+        } 
+        
+        else if (key === "Backspace") {
             event.preventDefault();
 
             current_input = current_input.slice(0, -1);
 
-        } else if (key === "ArrowUp") {
+        } 
+        
+        else if (key === "ArrowUp") {
             event.preventDefault();
 
             if (history_index > 0) {
@@ -208,19 +208,23 @@ document.addEventListener("DOMContentLoaded", () => {
                 current_input = history[history_index] || "";
             }
 
-        } else if (key === "ArrowDown") {
+        } 
+        
+        else if (key === "ArrowDown") {
             event.preventDefault();
 
             if (history_index < history.length - 1) {
                 history_index++;
                 current_input = history[history_index] || "";
-
-            } else {
+            } 
+            
+            else {
                 history_index = history.length;
                 current_input = "";
             }
-
-        } else if (key.length === 1 && !event.ctrlKey && !event.metaKey) {
+        } 
+        
+        else if (key.length === 1 && !event.ctrlKey && !event.metaKey) {
             current_input += key;
         }
 
@@ -250,7 +254,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const rect = card_container.getBoundingClientRect();
             const anchor_x = rect.width;
             const anchor_y = 20;
-            
+
             lanyard.setAttribute('x1', anchor_x);
             lanyard.setAttribute('y1', anchor_y);
 
@@ -264,13 +268,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Dragging starts when left mouse button pressed
         card.addEventListener('mousedown', (e) => {
-            if (e.button !== 0) return; // Only allow left-click drags
+
+            // Only allow left-click drags
+            if (e.button !== 0) {
+                return; 
+            }
+
             dragging = true;
+
             card.classList.add('dragging');
+
             let { rect } = update_container_rect();
+
             container_rectangle = rect;
             drag_offset_x = e.clientX - container_rectangle.left - card_x;
             drag_offset_y = e.clientY - container_rectangle.top - card_y;
+
             e.preventDefault();
         });
 
@@ -282,9 +295,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Updates card position during dragging
         window.addEventListener('mousemove', (e) => {
-            if (!dragging) return;
+            if (!dragging) {
+                return;
+            }
+
             let { rect } = update_container_rect();
             container_rectangle = rect;
+
             const terminal_rect = terminal.getBoundingClientRect();
             
             // Stays left of terminal
@@ -300,7 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const card_half_height = card.offsetHeight / 2;
             const min_y = card_half_height;
             const max_y = window.innerHeight - container_rectangle.top - card_half_height;
-            
+
             let new_card_y = e.clientY - container_rectangle.top - drag_offset_y;
             card_y = Math.max(min_y, Math.min(max_y, new_card_y));
 
@@ -312,6 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Right-click flips the card
         card.addEventListener('contextmenu', (e) => {
             e.preventDefault();
+
             card.classList.toggle('flipped');
         });
 
@@ -370,7 +388,9 @@ document.addEventListener("DOMContentLoaded", () => {
             // Apply position and rotation
             card.style.left = `${card_x}px`;
             card.style.top = `${card_y}px`;
+
             const angle = Math.atan2(card_x - anchor_x, card_y - anchor_y) * (180 / Math.PI);
+
             card.style.transform = `translateX(-50%) rotate(${-angle}deg)`;
 
             // Update lanyard line
