@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/style.css" >
-    <link rel="icon" type="image/png" href="assets/images/favicon.png">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
     <title>Terminal</title>
 </head>
 <body>
+
+    <!-- ID Card -->
 
     <div id="id-card-container" aria-hidden="true">
         <svg id="lanyard" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,37 +21,32 @@
                 <div class="card-front">
                     <img src="assets/images/mahi.jpg" alt="Profile Picture" class="profile-pic">
                     <h3>Mahi Mahatab</h3>
-                    <p>Aspiring Software Engineer</p>
+                    <p>Burnside High School Student</p>
                     <div class="school-logo"><img src="assets/images/school-logo.png" alt="school logo"></div>
                 </div>
 
                 <div class="card-back" aria-hidden="true">
-                    <h3>More about Mahi</h3>
-                    <p>Interests: AI, embedded systems, web & game dev.</p>
-                    <p style="margin-top:6px;">Contact:</p>
-                    <p style="font-size:13px; word-break:break-word;">
-                        <a href="mailto:md.mahatabmahimn@gmail.com" target="_blank">md.mahatabmahimn@gmail.com</a>
-                    </p>
-                    <p style="margin-top:8px; font-size:13px;">
-                        GitHub: <a href="https://github.com/Astral-Viscount" target="_blank">Astral-Viscount</a>
-                    </p>
-                    <div class="school-logo"><img src="assets/images/school-logo.png" alt="school logo"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- The Terminal -->
+
     <main id="main_container">
         <div class="terminal" id="terminal">
             <section id="top_bar">
-                <p id="bar-user">&copy mahi@ubuntu: ~   Type <b>"help"</b> to see the commads</p>
+                <p id="bar-user">&copy; mahi@ubuntu: ~ </p>
+
+                <div id="hint-bubble" class="hint-bubble" role="note" aria-live="polite">
+                    <span>Type <b>"help"</b> to see available commands -- Right-click the ID card to flip it.</span>
+                </div>
 
                 <div id="top_buttons">
                     <button class="button">&#x2212;</button>
                     <button class="button">&#9723;</button>
                     <button class="button" id="exit">&#x2716;</button>
                 </div>
-
             </section>
 
             <section id="body">
@@ -63,6 +60,48 @@
             </section>
         </div>
     </main>
+
+    <!-- Template code for id card, projects and tools to refer to in js-->
+
+    <template id="id-card-back-template">
+        <div class="back-header">
+            <h3>Burnside High School</h3>
+            <div class="school-id">SCHOOL ID: <strong>23691</strong></div>
+        </div>
+        <div class="back-content">
+            <div class="back-photo">
+                <img src="assets/images/mahi.jpg" alt="photo">
+            </div>
+            <div class="back-info">
+                <div class="info-row"><span class="label">LEGAL NAME</span><span class="value">MD Mahatab Mahi</span></div>
+                <div class="info-row"><span class="label">PREFERRED</span><span class="value">Mahi Mahatab</span></div>
+                <div class="info-row"><span class="label">DOB</span><span class="value">26 Oct 2009</span></div>
+                <div class="info-row"><span class="label">AGE</span><span class="value">15</span></div>
+                <div class="info-row"><span class="label">YEAR</span><span class="value">11</span></div>
+                <div class="info-row"><span class="label">NSN</span><span class="value">0168531528</span></div>
+            </div>
+        </div>
+        <div class="back-footer">
+            <img src="assets/images/school-logo.png" alt="school logo" class="footer-logo">
+        </div>
+    </template>
+
+    <template id="project-card-template">
+        <div class="project-card">
+            <img src="" alt="" class="project-image">
+            <div class="title"></div>
+            <div class="desc"></div>
+            <div class="link"><a href="" target="_blank" rel="noopener noreferrer">View project ↗</a></div>
+        </div>
+    </template>
+
+    <template id="tool-card-template">
+        <div class="tool-card">
+            <img src="" alt="" class="tool-image">
+            <div class="tool-name"></div>
+        </div>
+    </template>
+
     <script src="js/script.js"></script>
 </body>
 </html>

@@ -1,18 +1,6 @@
 @import url(https://fonts.googleapis.com/css?family=Ubuntu);
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono');
 
-#main_container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-a {
-    color: #4878c0;
-    text-decoration: none;
-}
-
 body {
     background: linear-gradient(45deg, #57003f 0%,#f57453 100%);
     font-family: 'Ubuntu', sans-serif;
@@ -21,6 +9,11 @@ body {
     justify-content: right;
     align-items: center;
     height: 100vh;
+}
+
+a {
+    color: #4878c0;
+    text-decoration: none;
 }
 
 .terminal {
@@ -46,17 +39,22 @@ body {
     border-top-right-radius: 5px;
     background: linear-gradient(#504b45 0%,#3c3b37 100%);
     justify-content: space-between;
+    position: relative;
 }
 
-#help {
+.hint-bubble {
     display: flex;
-    width: 100%;
-    height: 40px;
     align-items: center;
-    padding: 0 8px;
-    box-sizing: border-box;
-    background: linear-gradient(#504b45 0%,#3c3b37 100%);
-    justify-content: space-between;
+    gap: 8px;
+    background: rgba(255,255,255,0.04);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 24px;
+    font-size: 13px;
+    margin-left: 12px;
+    pointer-events: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.03);
 }
 
 #top_buttons {
@@ -90,12 +88,11 @@ body {
     background: linear-gradient(#e81123 0%, #c00000 100%);
 }
 
-.bar-user {
+#bar-user {
     color: #d5d0ce;
     margin-left: 6px;
     font-size: 14px;
     line-height: 15px;
-    -webkit-user-select: none;
     user-select: none;
     white-space: nowrap;
 }
@@ -120,19 +117,19 @@ body {
     white-space: nowrap;
 }
 
-#user {
-    color: #7eda28;
-    margin-right: 5px;
+#user { 
+    color: #7eda28; 
+    margin-right: 5px; 
 }
 
-#wavy {
-    color: #4878c0;
-    margin-right: 5px;
+#wavy { 
+    color: #4878c0; 
+    margin-right: 5px; 
 }
 
-#dollar {
-    color: #dddddd;
-    margin-right: 5px;
+#dollar { 
+    color: #dddddd; 
+    margin-right: 5px; 
 }
 
 #cursor {
@@ -155,13 +152,6 @@ body {
     }
 }
 
-@media (max-width: 600px) {
-    .terminal {
-        max-height: 90%;
-        width: 90%;
-    }
-}
-
 #input {
     white-space: pre-wrap;
     color: #dddddd;
@@ -169,17 +159,6 @@ body {
     padding-left: 2px;
     display: inline-block;
     min-width: 1ch;
-    max-width: 100%;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-#output {
-    white-space: pre-wrap; 
-    color: #dddddd;
-    font-family: 'Ubuntu Mono', monospace;
-    padding-left: 4px;
-    display: block;
     max-width: 100%;
     word-wrap: break-word;
     overflow-wrap: break-word;
@@ -222,11 +201,6 @@ body {
     cursor: grab;
     user-select: none;
     transform-origin: top center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    box-sizing: border-box;
     pointer-events: auto;
 }
 
@@ -239,7 +213,6 @@ body {
     border-radius: 18px;
     box-shadow: 0 28px 50px rgba(0,0,0,0.28), 0 12px 18px rgba(0,0,0,0.18);
 }
-
 
 #id-card.flipped .card-inner {
     transform: rotateY(180deg);
@@ -262,28 +235,7 @@ body {
 
 .card-back {
     transform: rotateY(180deg);
-    justify-content: center;
-    text-align: center;
     color: #222;
-}
-
-#id-card .id-header {
-    width: 100%;
-    height: 48px;
-    background: transparent;
-    border-radius: 10px;
-    margin-bottom: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-#id-card .card-logo {
-    width: 64px;
-    height: 36px;
-    object-fit: contain;
-    border-radius: 6px;
 }
 
 #id-card .profile-pic {
@@ -296,30 +248,25 @@ body {
     margin-bottom: 12px;
 }
 
-#id-card h3 { 
-    margin: 8px 0; 
-    font-size: 20px; 
-    color: #222; 
-    text-align: center; 
+#id-card h3 {
+    margin: 8px 0;
+    font-size: 20px;
+    color: #222;
+    text-align: center;
 }
 
-#id-card p { 
-    margin: 0; 
-    font-size: 14px; 
-    color: #666; 
-    text-align: center; 
+#id-card p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
 }
 
 #id-card .school-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-top: auto;
     width: 86%;
     max-width: 220px;
     height: 64px;
-    padding: 6px 0;
-    box-sizing: border-box;
 }
 
 #id-card .school-logo img {
@@ -327,11 +274,172 @@ body {
     height: 100%;
     max-width: 100%;
     object-fit: contain;
-    display: block;
-    pointer-events: none;
 }
 
-#id-card.flipped { 
-    cursor: pointer; 
+.card-back .back-header {
+    width: 100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    margin-bottom:8px;
 }
 
+.card-back .back-header h3 { 
+    margin:0; 
+    font-size:18px; 
+    color:#111; 
+}
+
+.card-back .school-id { 
+    font-size:13px; 
+    color:#444; 
+}
+
+.card-back .back-content {
+    width:100%;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    margin-top:6px;
+}
+.card-back .back-photo { 
+    flex:0 0 38%; 
+}
+
+.card-back .back-photo img { 
+    width:100%; 
+    border-radius:6px; 
+    display:block; 
+}
+
+.card-back .back-info { 
+    flex:1 1 62%; 
+    font-size:13px; 
+    display:flex; 
+    flex-direction:column; 
+    gap:6px; 
+}
+
+.card-back .info-row { 
+    display:flex; 
+    justify-content:space-between; 
+    gap:8px; 
+}
+
+.card-back .label { 
+    font-weight:700; 
+    font-size:12px; 
+}
+
+.card-back .value { 
+    font-size:13px; 
+}
+
+.card-back .back-footer { 
+    margin-top:12px; 
+    text-align:center; 
+}
+
+.card-back .footer-logo { 
+    height:48px; 
+    object-fit:contain; 
+}
+
+
+.terminal-output {
+    color: #ddd;
+    font-family: 'Ubuntu Mono', monospace;
+    padding: 10px 12px;
+    box-sizing: border-box;
+}
+
+.better-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.project-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 220px;
+}
+
+.project-card img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.project-card .title {
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.project-card .desc {
+    color: #ddd;
+    font-size: 13px;
+    min-height: 40px;
+}
+
+.project-card .link {
+    margin-top: auto;
+    text-align: right;
+}
+
+.project-card .link a {
+    color: #7ec0ff;
+}
+
+.tool-card {
+    cursor: pointer;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
+    min-height: 140px;
+    gap: 8px;
+}
+.tool-card img {
+    width: 100%;
+    max-width: 140px;
+    height: 88px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    padding: 6px;
+}
+
+.tool-card .tool-name {
+    margin-top: 6px;
+    font-size: 14px;
+    color: #fff;
+}
+
+@media (max-width: 880px) {
+    .terminal {
+        width: 90vw;
+        height: 90vh;
+    }
+
+    .project-card img, .tool-card img { 
+        height: 100px; 
+    }
+
+    .project-card { 
+        min-height: 180px; 
+    }
+}
