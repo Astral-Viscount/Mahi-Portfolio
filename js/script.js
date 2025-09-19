@@ -15,11 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let history_index = -1;
     let current_input = "";
 
-    // Each available command
-    const commands = {
-        help: `<b>Available commands:</b><br> - about<br> - skills<br> - projects<br> - tools<br> - contact<br> - clear`
-    };
-
     input.focus();
 
     // Updates the input and cursor position
@@ -69,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Calls the function based on the command
         if (command === "help") {
-            create_output_element(commands.help);
+            show_help();
         } 
         
         else if (command === "about") {
@@ -104,6 +99,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // Added by ai to make the output lesss weird
     function escape_html(s) {
         return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    // Displays the available commands
+    function show_help() {
+        const template = document.getElementById('help-output-template');
+        if (!template) {
+            return;
+        }
+
+        create_output_element(template.innerHTML);
     }
 
     // Displays the projects
@@ -232,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-    // ID Card main Physics (Mostly taken from others).
+    // ID Card main Physics (Mostly taken from others)
     (function ID_Card_Physics() {
         const card_container = document.getElementById('id-card-container');
         const card = document.getElementById('id-card');
