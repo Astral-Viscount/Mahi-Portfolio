@@ -26,6 +26,8 @@ a {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    scrollbar-color: #555 transparent;
+    scrollbar-width: thin;
 }
 
 #top_bar {
