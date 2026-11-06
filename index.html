@@ -96,6 +96,14 @@
                     <span id="dollar">$</span>
                     <span id="input" spellcheck="false"></span>
                     <span id="cursor"></span>
+                    <textarea
+                        id="terminal-input-capture"
+                        aria-label="Terminal command input"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                        rows="1"
+                    ></textarea>
                 </div>
 
             </section>
@@ -112,6 +120,8 @@
                 <li>skills</li>
                 <li>projects</li>
                 <li>tools</li>
+                <li>awards</li>
+                <li>activities</li>
                 <li>contact</li>
                 <li>clear</li>
             </ul>
@@ -150,8 +160,8 @@
                 <img src="assets/images/portfolio.png" alt="Portfolio" class="project-image">
                 <div class="title">This Portfolio</div>
                 <div class="desc">Simple Website about me with a terminal aesthetic.</div>
-                <div class="link"><a href="https://github.com/Astral-Viscount/Mahi-Portfoliom">View project ↗</a></div>
-            </div
+                <div class="link"><a href="https://github.com/Astral-Viscount/Mahi-Portfolio">View project ↗</a></div>
+            </div>
         </div>
     </template>
 
@@ -245,6 +255,79 @@
                 <p><strong>GitHub:</strong> <a href="https://github.com/Astral-Viscount" target="_blank">Astral-Viscount</a></p>
             </div>
         </div>
+    </template>
+
+
+    <!-- Awards -->
+
+    <template id="awards-output-template">
+
+        <div class="info-section">
+            <h3>Awards & Achievements</h3>
+
+            <h4>NCEA Level 1 | 2025</h4>
+            <ul class="skills-list">
+                <li>Level 1 Excellence Endorsement</li>
+                <li>Mathematics - Excellence</li>
+                <li>Science - Excellence Endorsement</li>
+                <li>English - Merit Endorsement</li>
+                <li>Engineering - Merit Endorsement</li>
+            </ul>
+
+            <h4>Year 10 | 2024</h4>
+            <ul class="skills-list">
+                <li>First Place - Science</li>
+                <li>First Place - Electronics Technology</li>
+                <li>Excellence - Mathematics</li>
+                <li>Excellence - Social Studies</li>
+                <li>First Place - 10NPRT (class award)</li>
+            </ul>
+
+            <h4>Burnside High School Technology Fair | 2024</h4>
+            <ul class="skills-list">
+                <li>First Place - Electronics</li>
+                <li>Second Place - Software Engineering</li>
+            </ul>
+
+            <h4>Year 9 | 2023</h4>
+            <ul class="skills-list">
+                <li>Excellence - Mathematics</li>
+                <li>Excellence - Drama</li>
+            </ul>
+
+        </div>
+
+    </template>
+
+    <!-- Extracurricular Activities -->
+
+    <template id="activities-output-template">
+
+        <div class="info-section">
+            <h3>Competitions & Extracurricular Activities</h3>
+
+            <h4>Programming Competitions</h4>
+            <ul class="skills-list">
+                <li>New Zealand Informatics Competition (NZIC) - 2025, 2026</li>
+                <li>Canterbury Schools Programming Contest (CSPC) - 2025, 2026</li>
+                <li>Australian Informatics Olympiad (AIO) - 2025, 2026</li>
+            </ul>
+
+            <h4>Robotics</h4>
+            <ul class="skills-list">
+                <li>Canterbury Robotics Challenge - 2024, 2025, 2026</li>
+                <li>4067A Robotics Team Leader - Burnside High School (2024-2026)</li>
+            </ul>
+
+            <h4>Other Activities</h4>
+            <ul class="skills-list">
+                <li>Evolocity - 2026</li>
+                <li>Burnside High School Environment Club - 2025, 2026</li>
+                <li>Burnside High School Technical Crew (Aurora Centre) - 2025</li>
+            </ul>
+
+        </div>
+
     </template>
 
     <script src="js/script.js"></script>

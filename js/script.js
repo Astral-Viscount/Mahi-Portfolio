@@ -1,3 +1,4 @@
+
 // This code has been refined with AI as my original code had lots of repeating logic and bad vector computation it also had a slower runtime.
 // No new features or any functionalities were added by AI other than some design and web development conventions (like webkit and browser control)
 // Most of the id card calculations were copied from stack overlfow and some YT tutorials
@@ -9,22 +10,41 @@ document.addEventListener("DOMContentLoaded", () => {
     const prompt = document.getElementById("prompt");
     const cursor = document.getElementById("cursor");
     const input = document.getElementById("input");
+    const input_capture = document.getElementById("terminal-input-capture");
 
     // History and current input state
     let history = [];
     let history_index = -1;
     let current_input = "";
 
-    input.focus();
-
-    // Updates the input and cursor position
+    input_capture.focus();
+o
     function updateinput() {
-        input.textContent = current_input;
+        const selection_start = input_capture.selectionStart;
+        const selection_end = input_capture.selectionEnd;
+
+        input.replaceChildren();
+
+        const before_selection = current_input.slice(0, selection_start);
+        const selected_text = current_input.slice(selection_start, selection_end);
+        const after_selection = current_input.slice(selection_end);
+
+        input.appendChild(document.createTextNode(before_selection));
+
+        if (selection_start !== selection_end) {
+            const selection = document.createElement("span");
+            selection.className = "terminal-selection";
+            selection.textContent = selected_text;
+            input.appendChild(selection);
+        }
+
         input.appendChild(cursor);
+
+        input.appendChild(document.createTextNode(after_selection));
+
         body.scrollTop = body.scrollHeight;
     }
-
-    // Creates a new div to display output in the terminal
+l
     function create_output_element(html) {
         const output_el = document.createElement("div");
         output_el.className = "terminal-output";
@@ -33,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
         body.scrollTop = body.scrollHeight;
     }
 
-    // Fills the back of the ID card using the HTML template
     (function add_stuff() {
         const card_back = document.querySelector('#id-card .card-back');
 
@@ -41,9 +60,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!card_back || (card_back.innerHTML && card_back.innerHTML.trim().length > 20)) {
             return;
         }
-        
+
         const template = document.getElementById('id-card-back-template');
-        
+
         if(template) {
             const clone = template.content.cloneNode(true);
             card_back.appendChild(clone);
@@ -55,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function process_command(command_raw) {
         const command = command_raw.trim().toLowerCase();
         const promptLine = `<span id="user">mahi@ubuntu:</span><span id="wavy">~</span><span id="dollar">$</span> ${escape_html(command_raw)}`;
-        
+
         create_output_element(promptLine);
 
         if (!command) {
@@ -65,32 +84,40 @@ document.addEventListener("DOMContentLoaded", () => {
         // Calls the function based on the command
         if (command === "help") {
             show_help();
-        } 
-        
+        }
+
         else if (command === "about") {
             show_about();
-        } 
-        
+        }
+
         else if (command === "skills") {
             show_skills();
-        } 
-        
+        }
+
         else if (command === "projects") {
             show_projects();
-        } 
-        
+        }
+
         else if (command === "tools") {
             show_tools();
-        } 
-        
+        }
+
         else if (command === "contact") {
             show_contact();
-        } 
-        
+        }
+
+        else if (command == "awards") {
+            show_awards();
+        }
+
+        else if (command == "activities") {
+            show_activities();
+        }
+
         else if (command === "clear") {
             body.querySelectorAll(".terminal-output").forEach(o => o.remove());
-        } 
-        
+        }
+
         else {
             create_output_element(`<b>Command not found:</b> ${escape_html(command_raw)}. Type 'help' for commands.`);
         }
@@ -121,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         create_output_element(template.innerHTML);
     }
-    
+
     // Displays the tools
     function show_tools() {
         const template = document.getElementById('tools-output-template');
@@ -166,6 +193,114 @@ document.addEventListener("DOMContentLoaded", () => {
         create_output_element(template.innerHTML);
     }
 
+    // Displays the awards
+    function show_awards() {
+        const template = document.getElementById('awards-output-template');
+
+        if (!template) {
+            return;
+        }
+
+        create_output_element(template.innerHTML);
+    }
+
+    // Displays extracurricular activities
+    function show_activities() {
+        const template = document.getElementById('activities-output-template');
+
+        if (!template) {
+            return;
+        }
+
+        create_output_element(template.innerHTML);
+    }
+
+    // Updates the displayed input whenever the textarea changes
+    input_capture.addEventListener("input", () => {
+        current_input = input_capture.value;
+        updateinput();
+    });
+
+    // Handles pasting text into the terminal
+    input_capture.addEventListener("paste", (event) => {
+        event.preventDefault();
+
+        const pasted_text = event.clipboardData
+            .getData("text")
+            .replace(/[\r\n]+/g, " ");
+
+        const start = input_capture.selectionStart;
+        const end = input_capture.selectionEnd;
+
+        input_capture.setRangeText(pasted_text, start, end, "end");
+
+        current_input = input_capture.value;
+        updateinput();
+    });
+
+    document.addEventListener("selectionchange", () => {
+        if (document.activeElement === input_capture) {
+            updateinput();
+        }
+    });
+
+    input_capture.addEventListener("keyup", updateinput);
+
+    // All keyboard input for the terminal
+    document.addEventListener("keydown", (event) => {
+        if (document.activeElement !== input_capture) {
+            input_capture.focus();
+        }
+
+        const key = event.key;
+
+        if (key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+
+            process_command(current_input);
+
+            if (current_input.trim() && history[history.length - 1] !== current_input.trim()) {
+                history.push(current_input.trim());
+            }
+
+            history_index = history.length;
+            current_input = "";
+            input_capture.value = "";
+            input_capture.setSelectionRange(0, 0);
+        }
+
+        else if (key === "ArrowUp" && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+            event.preventDefault();
+
+            if (history_index > 0) {
+                history_index--;
+                current_input = history[history_index] || "";
+                input_capture.value = current_input;
+                input_capture.setSelectionRange(current_input.length, current_input.length);
+            }
+        }
+
+        else if (key === "ArrowDown" && !event.shiftKey && !event.ctrlKey && !event.altKey && !event.metaKey) {
+            event.preventDefault();
+
+            if (history_index < history.length - 1) {
+                history_index++;
+                current_input = history[history_index] || "";
+            }
+
+            else {
+                history_index = history.length;
+                current_input = "";
+            }
+
+            input_capture.value = current_input;
+            input_capture.setSelectionRange(current_input.length, current_input.length);
+        }
+
+        updateinput();
+
+    });
+
     // Listens for clicks on the tool cards
     document.body.addEventListener('click', (ev) => {
         const toolCard = ev.target.closest('.tool-card');
@@ -177,64 +312,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.open(url, '_blank', 'noopener');
             }
         }
-    });
-
-    // All keyboard input for the terminal
-    document.addEventListener("keydown", (event) => {
-        input.focus();
-        const key = event.key;
-
-        if (key === "Enter") {
-            event.preventDefault();
-
-            process_command(current_input);
-
-            if (current_input.trim() && history[history.length - 1] !== current_input.trim()) {
-                history.push(current_input.trim());
-            }
-
-            history_index = history.length;
-            current_input = "";
-
-        } 
-        
-        else if (key === "Backspace") {
-            event.preventDefault();
-
-            current_input = current_input.slice(0, -1);
-
-        } 
-        
-        else if (key === "ArrowUp") {
-            event.preventDefault();
-
-            if (history_index > 0) {
-                history_index--;
-                current_input = history[history_index] || "";
-            }
-
-        } 
-        
-        else if (key === "ArrowDown") {
-            event.preventDefault();
-
-            if (history_index < history.length - 1) {
-                history_index++;
-                current_input = history[history_index] || "";
-            } 
-            
-            else {
-                history_index = history.length;
-                current_input = "";
-            }
-        } 
-        
-        else if (key.length === 1 && !event.ctrlKey && !event.metaKey) {
-            current_input += key;
-        }
-
-        updateinput();
-
     });
 
     // ID Card main Physics (Mostly taken from others)
@@ -276,7 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // Only allow left-click drags
             if (e.button !== 0) {
-                return; 
+                return;
             }
 
             dragging = true;
@@ -308,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
             container_rectangle = rect;
 
             const terminal_rect = terminal.getBoundingClientRect();
-            
+
             // Stays left of terminal
             const card_half_width = card.offsetWidth / 2;
             const terminal_left = terminal_rect.left - container_rectangle.left;
@@ -317,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             let new_card_x = e.clientX - container_rectangle.left - drag_offset_x;
             card_x = Math.max(min_x, Math.min(max_x, new_card_x));
-            
+
             // Stays within window height
             const card_half_height = card.offsetHeight / 2;
             const min_y = card_half_height;
@@ -358,38 +435,38 @@ document.addEventListener("DOMContentLoaded", () => {
                 card_x += velocity_x;
                 card_y += velocity_y;
             }
-            
+
             // Side collision checks
             const card_half_width = card.offsetWidth / 2;
             const terminal_left = terminal.getBoundingClientRect().left - container_rectangle.left;
             const max_x = terminal_left - card_half_width - gap;
             const min_x = card_half_width;
 
-            if (card_x < min_x) { 
-                card_x = min_x; 
-                velocity_x *= -0.6; 
+            if (card_x < min_x) {
+                card_x = min_x;
+                velocity_x *= -0.6;
             }
 
-            if (card_x > max_x) { 
-                card_x = max_x; 
-                velocity_x *= -0.6; 
+            if (card_x > max_x) {
+                card_x = max_x;
+                velocity_x *= -0.6;
             }
-            
+
             // Top/Bottom collision checks
             const card_half_height = card.offsetHeight / 2;
             const min_y = card_half_height;
             const max_y = window.innerHeight - container_rectangle.top - card_half_height;
 
-            if (card_y < min_y) { 
-                card_y = min_y; 
-                velocity_y *= -0.6; 
+            if (card_y < min_y) {
+                card_y = min_y;
+                velocity_y *= -0.6;
             }
 
-            if (card_y > max_y) { 
-                card_y = max_y; 
-                velocity_y *= -0.6; 
+            if (card_y > max_y) {
+                card_y = max_y;
+                velocity_y *= -0.6;
             }
-            
+
             // Apply position and rotation
             card.style.left = `${card_x}px`;
             card.style.top = `${card_y}px`;

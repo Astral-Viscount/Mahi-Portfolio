@@ -543,3 +543,19 @@ a {
     margin-bottom: 8px;
     color: #7ec0ff;
 }
+
+#terminal-input-capture {
+    position: fixed;
+    left: -10000px;
+    top: 0;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    resize: none;
+    overflow: hidden;
+}
+
+.terminal-selection {
+    background-color: #4878c0;
+    color: #ffffff;
+}
