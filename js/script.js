@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let current_input = "";
 
     input_capture.focus();
-o
+
     function updateinput() {
         const selection_start = input_capture.selectionStart;
         const selection_end = input_capture.selectionEnd;
@@ -44,7 +44,7 @@ o
 
         body.scrollTop = body.scrollHeight;
     }
-l
+
     function create_output_element(html) {
         const output_el = document.createElement("div");
         output_el.className = "terminal-output";
@@ -215,7 +215,6 @@ l
         create_output_element(template.innerHTML);
     }
 
-    // Updates the displayed input whenever the textarea changes
     input_capture.addEventListener("input", () => {
         current_input = input_capture.value;
         updateinput();
