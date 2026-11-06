@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let history_index = -1;
     let current_input = "";
 
-    input_capture.focus();
+    input_capture.focus({ preventScroll: true });
 
     function updateinput() {
         const selection_start = input_capture.selectionStart;
@@ -121,6 +121,19 @@ document.addEventListener("DOMContentLoaded", () => {
         else {
             create_output_element(`<b>Command not found:</b> ${escape_html(command_raw)}. Type 'help' for commands.`);
         }
+    }
+
+    // Runs a command and records it in the history (used by Enter and by the tappable command bar)
+    function run_command(text) {
+        process_command(text);
+
+        const trimmed = text.trim();
+
+        if (trimmed && history[history.length - 1] !== trimmed) {
+            history.push(trimmed);
+        }
+
+        history_index = history.length;
     }
 
     // Added by ai to make the output lesss weird
@@ -247,6 +260,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // All keyboard input for the terminal
     document.addEventListener("keydown", (event) => {
+        // Let keyboard users activate the tappable command buttons normally
+        if (event.target.closest && event.target.closest("#quick-commands")) {
+            return;
+        }
+
         if (document.activeElement !== input_capture) {
             input_capture.focus();
         }
@@ -256,13 +274,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (key === "Enter" && !event.shiftKey) {
             event.preventDefault();
 
-            process_command(current_input);
+            run_command(current_input);
 
-            if (current_input.trim() && history[history.length - 1] !== current_input.trim()) {
-                history.push(current_input.trim());
-            }
-
-            history_index = history.length;
             current_input = "";
             input_capture.value = "";
             input_capture.setSelectionRange(0, 0);
@@ -300,6 +313,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+    body.addEventListener("click", (ev) => {
+        if (ev.target.closest("a, .tool-card")) {
+            return;
+        }
+
+        // Don't steal focus while the user is selecting text to copy
+        if (window.getSelection && window.getSelection().toString().length > 0) {
+            return;
+        }
+
+        input_capture.focus({ preventScroll: true });
+    });
+
+    const quick_commands = document.getElementById("quick-commands");
+
+    if (quick_commands) {
+        // Keeps focus where it is, so tapping a button doesn't close an open keyboard
+        quick_commands.addEventListener("mousedown", (ev) => ev.preventDefault());
+
+        quick_commands.addEventListener("click", (ev) => {
+            const button = ev.target.closest("button[data-cmd]");
+
+            if (!button) {
+                return;
+            }
+
+            run_command(button.dataset.cmd);
+        });
+    }
+
+    (function keep_prompt_above_keyboard() {
+        const vv = window.visualViewport;
+
+        if (!vv) {
+            return;
+        }
+
+        const root = document.documentElement;
+
+        function sync() {
+            if (vv.scale > 1.05) {
+                return;
+            }
+
+            const keyboard_open = window.innerHeight - vv.height > 120;
+
+            root.classList.toggle("keyboard-open", keyboard_open);
+
+            if (keyboard_open) {
+                root.style.setProperty("--app-h", `${Math.round(vv.height)}px`);
+                window.scrollTo(0, 0);
+            }
+
+            else {
+                root.style.removeProperty("--app-h");
+            }
+
+            body.scrollTop = body.scrollHeight;
+        }
+
+        vv.addEventListener("resize", sync);
+        sync();
+    })();
+
     // Listens for clicks on the tool cards
     document.body.addEventListener('click', (ev) => {
         const toolCard = ev.target.closest('.tool-card');
@@ -314,6 +391,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ID Card main Physics (Mostly taken from others)
+    // Works in both layouts: side-by-side (card is left of the terminal) and stacked (card hangs in a strip above it).
+    // Mouse, touch and pen all use pointer events. Right-click (mouse) or double-tap (touch) flips the card.
     (function ID_Card_Physics() {
         const card_container = document.getElementById('id-card-container');
         const card = document.getElementById('id-card');
@@ -324,109 +403,234 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Dragging state and movement variables
         let dragging = false;
+        let active_pointer = null;
+        let last_pointer_type = 'mouse';
         let drag_offset_x = 0, drag_offset_y = 0;
         let card_x, card_y, velocity_x = 0, velocity_y = 0;
 
-        // Spring and gravity
-        const stiffness = 0.2, damping = 0.9, length = 100, gap = 18;
+        // Double-tap detection (touch)
+        let tap = null;
+        let last_tap_time = 0;
 
-        // Updates container rectancgle and anchor point (the top of the lanyard)
-        function update_container_rect() {
+        // Spring and gravity (the length, gap and gravity are for a full size card and get scaled with it)
+        const stiffness = 0.2, damping = 0.9, base_length = 100, base_gap = 18, base_gravity = 0.5;
+
+        // Works out where the card is allowed to be and where the lanyard is attached.
+        // The container is position:fixed in the side-by-side layout and position:relative when stacked (see style.css).
+        function get_geometry() {
             const rect = card_container.getBoundingClientRect();
-            const anchor_x = rect.width;
-            const anchor_y = 20;
+            const side_by_side = getComputedStyle(card_container).position === 'fixed';
+
+            const scale = (card.offsetWidth / 300) || 1;
+            const card_width = card.offsetWidth;
+            const card_height = card.offsetHeight;
+
+            let anchor_x, anchor_y, min_x, max_x, min_y, max_y;
+
+            if (side_by_side) {
+                // Stays left of terminal
+                const terminal_left = terminal.getBoundingClientRect().left - rect.left;
+
+                anchor_x = rect.width;
+                anchor_y = 20;
+
+                min_x = card_width / 2;
+                max_x = terminal_left - card_width / 2 - base_gap * scale;
+
+                min_y = card_height / 2;
+                max_y = rect.height - card_height;
+            }
+
+            else {
+                // Stays inside the strip above the terminal
+                anchor_x = rect.width / 2;
+                anchor_y = 0;
+
+                min_x = card_width / 2;
+                max_x = rect.width - card_width / 2;
+
+                min_y = 40 * scale;
+                max_y = rect.height - card_height;
+            }
 
             lanyard.setAttribute('x1', anchor_x);
             lanyard.setAttribute('y1', anchor_y);
 
-            return { rect, anchor_x, anchor_y };
+            return { rect, side_by_side, scale, anchor_x, anchor_y, min_x, max_x, min_y, max_y };
+        }
+
+        // The card swings around its lanyard, so its bottom corners stick out sideways when it hangs at an angle.
+        // In the stacked layout (where the card shares the full width of a phone) stop it being dragged so far
+        // sideways that most of it ends up off screen. A little overhang is allowed so it still feels like it swings.
+        // The side-by-side layout keeps its simple limits.
+        function fit_x(x, y, g) {
+            x = clamp(x, g.min_x, g.max_x);
+
+            if (g.side_by_side) {
+                return x;
+            }
+
+            const half_w = card.offsetWidth / 2;
+            const height = card.offsetHeight;
+            const overhang = card.offsetWidth * 0.5;
+
+            // Does the swung card stay within the strip (plus the allowed overhang)?
+            function fits(candidate_x) {
+                const theta = Math.atan2(candidate_x - g.anchor_x, y - g.anchor_y);
+                const sin = Math.sin(theta), cos = Math.cos(theta);
+
+                // The card is rotated by -theta around its top centre; check the four corners
+                for (const [cx, cy] of [[-half_w, 0], [half_w, 0], [-half_w, height], [half_w, height]]) {
+                    const corner_x = candidate_x + cx * cos + cy * sin;
+
+                    if (corner_x < -overhang || corner_x > g.rect.width + overhang) {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            if (fits(x)) {
+                return x;
+            }
+
+            // Find how far from hanging straight down the card can go in this direction
+            let low = 0, high = 1;
+
+            for (let i = 0; i < 14; i++) {
+                const mid = (low + high) / 2;
+
+                if (fits(g.anchor_x + (x - g.anchor_x) * mid)) {
+                    low = mid;
+                }
+
+                else {
+                    high = mid;
+                }
+            }
+
+            return g.anchor_x + (x - g.anchor_x) * low;
+        }
+
+        function clamp(value, min, max) {
+            return Math.max(min, Math.min(max, value));
         }
 
         // Initial position of card
-        let { rect: container_rectangle, anchor_x } = update_container_rect();
-        card_x = anchor_x;
-        card_y = 220;
+        {
+            const { scale, anchor_x } = get_geometry();
+            card_x = anchor_x;
+            card_y = 220 * scale;
+        }
 
-        // Dragging starts when left mouse button pressed
-        card.addEventListener('mousedown', (e) => {
+        // Dragging starts on left mouse button, or any touch / pen contact
+        card.addEventListener('pointerdown', (e) => {
+            last_pointer_type = e.pointerType;
 
-            // Only allow left-click drags
-            if (e.button !== 0) {
+            if (e.pointerType === 'mouse' && e.button !== 0) {
+                return;
+            }
+
+            if (dragging) {
                 return;
             }
 
             dragging = true;
+            active_pointer = e.pointerId;
+
+            // Keeps sending move/up events to the card even if the finger or cursor leaves it
+            try {
+                card.setPointerCapture(e.pointerId);
+            } catch (err) { /* pointer already gone */ }
 
             card.classList.add('dragging');
 
-            let { rect } = update_container_rect();
+            const { rect } = get_geometry();
 
-            container_rectangle = rect;
-            drag_offset_x = e.clientX - container_rectangle.left - card_x;
-            drag_offset_y = e.clientY - container_rectangle.top - card_y;
+            drag_offset_x = e.clientX - rect.left - card_x;
+            drag_offset_y = e.clientY - rect.top - card_y;
+
+            tap = { x: e.clientX, y: e.clientY, time: performance.now(), moved: false };
 
             e.preventDefault();
         });
 
-        // Dragging stops when mouse released
-        window.addEventListener('mouseup', () => {
-            dragging = false;
-            card.classList.remove('dragging');
-        });
-
         // Updates card position during dragging
-        window.addEventListener('mousemove', (e) => {
-            if (!dragging) {
+        card.addEventListener('pointermove', (e) => {
+            if (!dragging || e.pointerId !== active_pointer) {
                 return;
             }
 
-            let { rect } = update_container_rect();
-            container_rectangle = rect;
+            const g = get_geometry();
 
-            const terminal_rect = terminal.getBoundingClientRect();
-
-            // Stays left of terminal
-            const card_half_width = card.offsetWidth / 2;
-            const terminal_left = terminal_rect.left - container_rectangle.left;
-            const max_x = terminal_left - card_half_width - gap;
-            const min_x = card_half_width;
-
-            let new_card_x = e.clientX - container_rectangle.left - drag_offset_x;
-            card_x = Math.max(min_x, Math.min(max_x, new_card_x));
-
-            // Stays within window height
-            const card_half_height = card.offsetHeight / 2;
-            const min_y = card_half_height;
-            const max_y = window.innerHeight - container_rectangle.top - card_half_height;
-
-            let new_card_y = e.clientY - container_rectangle.top - drag_offset_y;
-            card_y = Math.max(min_y, Math.min(max_y, new_card_y));
+            card_y = clamp(e.clientY - g.rect.top - drag_offset_y, g.min_y, g.max_y);
+            card_x = fit_x(e.clientX - g.rect.left - drag_offset_x, card_y, g);
 
             // Cancel velocity while dragging
             velocity_x = 0;
             velocity_y = 0;
+
+            if (tap && Math.hypot(e.clientX - tap.x, e.clientY - tap.y) > 10) {
+                tap.moved = true;
+            }
         });
 
-        // Right-click flips the card
+        // Dragging stops when the pointer is released
+        function end_drag(e) {
+            if (!dragging || e.pointerId !== active_pointer) {
+                return;
+            }
+
+            dragging = false;
+            active_pointer = null;
+            card.classList.remove('dragging');
+
+            // Two quick taps with a finger flip the card
+            if (e.type === 'pointerup' && e.pointerType !== 'mouse' && tap && !tap.moved) {
+                const now = performance.now();
+
+                if (now - tap.time < 300) {
+                    if (now - last_tap_time < 350) {
+                        card.classList.toggle('flipped');
+                        last_tap_time = 0;
+                    }
+
+                    else {
+                        last_tap_time = now;
+                    }
+                }
+            }
+
+            tap = null;
+        }
+
+        card.addEventListener('pointerup', end_drag);
+        card.addEventListener('pointercancel', end_drag);
+        card.addEventListener('lostpointercapture', end_drag);
+
+        // Right-click flips the card. (A long-press on a phone also fires this, so only react to the mouse.)
         card.addEventListener('contextmenu', (e) => {
             e.preventDefault();
 
-            card.classList.toggle('flipped');
+            if (last_pointer_type === 'mouse') {
+                card.classList.toggle('flipped');
+            }
         });
 
         // Spring motion and gravity
         function physics() {
-            let { rect, anchor_x, anchor_y } = update_container_rect();
-            container_rectangle = rect;
+            const g = get_geometry();
 
             if (!dragging) {
                 // Calculate spring forces and gravity
-                const distance_x = card_x - anchor_x;
-                const distance_y = card_y - anchor_y;
+                const length = base_length * g.scale;
+                const distance_x = card_x - g.anchor_x;
+                const distance_y = card_y - g.anchor_y;
                 const distance = Math.sqrt(distance_x * distance_x + distance_y * distance_y) || 0.001;
                 const stretch = distance - length;
                 const force_x = -stiffness * stretch * (distance_x / distance);
-                const force_y = -stiffness * stretch * (distance_y / distance) + 0.5; // Gravity
+                const force_y = -stiffness * stretch * (distance_y / distance) + base_gravity * g.scale; // Gravity
 
                 // Apply velocity with damping
                 velocity_x = (velocity_x + force_x) * damping;
@@ -436,33 +640,21 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Side collision checks
-            const card_half_width = card.offsetWidth / 2;
-            const terminal_left = terminal.getBoundingClientRect().left - container_rectangle.left;
-            const max_x = terminal_left - card_half_width - gap;
-            const min_x = card_half_width;
+            const fitted_x = fit_x(card_x, card_y, g);
 
-            if (card_x < min_x) {
-                card_x = min_x;
-                velocity_x *= -0.6;
-            }
-
-            if (card_x > max_x) {
-                card_x = max_x;
+            if (fitted_x !== card_x) {
+                card_x = fitted_x;
                 velocity_x *= -0.6;
             }
 
             // Top/Bottom collision checks
-            const card_half_height = card.offsetHeight / 2;
-            const min_y = card_half_height;
-            const max_y = window.innerHeight - container_rectangle.top - card_half_height;
-
-            if (card_y < min_y) {
-                card_y = min_y;
+            if (card_y < g.min_y) {
+                card_y = g.min_y;
                 velocity_y *= -0.6;
             }
 
-            if (card_y > max_y) {
-                card_y = max_y;
+            if (card_y > g.max_y) {
+                card_y = g.max_y;
                 velocity_y *= -0.6;
             }
 
@@ -470,7 +662,7 @@ document.addEventListener("DOMContentLoaded", () => {
             card.style.left = `${card_x}px`;
             card.style.top = `${card_y}px`;
 
-            const angle = Math.atan2(card_x - anchor_x, card_y - anchor_y) * (180 / Math.PI);
+            const angle = Math.atan2(card_x - g.anchor_x, card_y - g.anchor_y) * (180 / Math.PI);
 
             card.style.transform = `translateX(-50%) rotate(${-angle}deg)`;
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
     <title>Mahi Mahatab</title>
@@ -77,7 +77,8 @@
                 <p id="bar-user">&copy; mahi@ubuntu: ~ </p>
 
                 <div id="hint-bubble" class="hint-bubble" role="note" aria-live="polite">
-                    <span>Type <b>"help"</b> to see available commands -- Right-click the ID card to flip it</span>
+                    <span class="hint-mouse">Type <b>"help"</b> to see available commands -- Right-click the ID card to flip it</span>
+                    <span class="hint-touch">Tap or Type a command below -- Double-tap the ID card to flip it</span>
                 </div>
 
                 <div id="top_buttons">
@@ -101,12 +102,26 @@
                         aria-label="Terminal command input"
                         autocomplete="off"
                         autocapitalize="off"
+                        autocorrect="off"
+                        enterkeyhint="go"
                         spellcheck="false"
                         rows="1"
                     ></textarea>
                 </div>
 
             </section>
+
+            <nav id="quick-commands" aria-label="Quick commands">
+                <button type="button" data-cmd="help">help</button>
+                <button type="button" data-cmd="about">about</button>
+                <button type="button" data-cmd="skills">skills</button>
+                <button type="button" data-cmd="projects">projects</button>
+                <button type="button" data-cmd="tools">tools</button>
+                <button type="button" data-cmd="awards">awards</button>
+                <button type="button" data-cmd="activities">activities</button>
+                <button type="button" data-cmd="contact">contact</button>
+                <button type="button" data-cmd="clear">clear</button>
+            </nav>
         </div>
     </main>
 
@@ -170,7 +185,7 @@
     <template id="tools-output-template">
         <strong>Tools (click a tile to open)</strong>
 
-        <div class="better-grid">
+        <div class="better-grid tools-grid">
             <div class="tool-card" data-tool-url="https://github.com">
                 <img src="assets/images/github.png" alt="GitHub" class="tool-image">
                 <div class="tool-name">GitHub</div>
